@@ -1,0 +1,61 @@
+{
+  "$schema": "https://turborepo.org/schema.json",
+  "pipeline": {
+    "build": {
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        "dist/**"
+      ],
+      "inputs": [
+        "src/**/*",
+        "package.json",
+        "tsconfig.json",
+        "!**/*.test.ts",
+        "!**/*.spec.ts"
+      ]
+    },
+    "lint": {
+      "outputs": [],
+      "inputs": [
+        "src/**/*",
+        "package.json",
+        "tsconfig.json",
+        ".eslintrc.js"
+      ]
+    },
+    "test": {
+      "dependsOn": [
+        "build"
+      ],
+      "outputs": [],
+      "inputs": [
+        "src/**/*",
+        "package.json",
+        "tsconfig.json",
+        "jest.config.ts"
+      ]
+    },
+    "dev:server": {
+      "outputs": [],
+      "inputs": [
+        "src/**/*",
+        "package.json",
+        "tsconfig.json"
+      ]
+    },
+    "dev:client": {
+      "outputs": [],
+      "inputs": [
+        "src/**/*",
+        "package.json",
+        "tsconfig.json"
+      ]
+    }
+  },
+  "globalDependencies": [
+    "package.json",
+    "pnpm-lock.yaml"
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "./",
+    "composite": true,
+    "paths": {
+      "@common/*": [
+        "../redtun-common/src/*"
+      ]
+    }
+  },
+  "include": [
+    "src/**/*.ts",
+    "jest.config.ts"
+  ],
+  "references": [
+    {
+      "path": "../redtun-common"
+    }
+  ]
+}
