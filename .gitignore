@@ -1,36 +1,19 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-# dependencies
+# Generated files
 node_modules
-/.pnp
-.pnp.js
-
-# testing
-/coverage
-
-# misc
+dist
 .DS_Store
-*.pem
 
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
-
-# local env files
-.env*.local
-
-# vercel
-.vercel
-
-# typescript
+# Typescript
 *.tsbuildinfo
-next-env.d.ts
-data/
+*.d.ts
 
+# Turborepo
 .turbo
-build/
-dist/
-.next/
-out/
+
+# Jest
+coverage
+.coverage
+
+# Env files
+.env*
+!.env.example

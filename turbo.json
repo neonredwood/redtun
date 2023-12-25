@@ -1,61 +1,48 @@
 {
-  "$schema": "https://turborepo.org/schema.json",
+  "$schema": "https://turbo.build/schema.json",
   "pipeline": {
+    "//#lint": {
+      "inputs": ["!.git/**", "!node_modules/**", "!packages/**"]
+    },
+    "//#lint:fix": {
+      "inputs": ["!.git/**", "!node_modules/**", "!packages/**"]
+    },
+    "//#format": {
+      "inputs": ["!.git/**", "!node_modules/**", "!packages/**"]
+    },
+    "//#format:fix": {
+      "inputs": ["!.git/**", "!node_modules/**", "!packages/**"]
+    },
     "build": {
-      "dependsOn": [
-        "^build"
-      ],
-      "outputs": [
-        "dist/**"
-      ],
-      "inputs": [
-        "src/**/*",
-        "package.json",
-        "tsconfig.json",
-        "!**/*.test.ts",
-        "!**/*.spec.ts"
-      ]
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", "tsconfig.tsbuildinfo"]
     },
-    "lint": {
-      "outputs": [],
-      "inputs": [
-        "src/**/*",
-        "package.json",
-        "tsconfig.json",
-        ".eslintrc.js"
-      ]
+    "clean:build": {
+      "dependsOn": ["build"]
     },
+    "dev": {
+      "dependsOn": ["build"],
+      "cache": false,
+      "persistent": true
+    },
+    "lint": {},
+    "lint:fix": {},
+    "format": {},
+    "format:fix": {},
     "test": {
-      "dependsOn": [
-        "build"
-      ],
-      "outputs": [],
-      "inputs": [
-        "src/**/*",
-        "package.json",
-        "tsconfig.json",
-        "jest.config.ts"
-      ]
+      "dependsOn": ["build"]
     },
-    "dev:server": {
-      "outputs": [],
-      "inputs": [
-        "src/**/*",
-        "package.json",
-        "tsconfig.json"
-      ]
-    },
-    "dev:client": {
-      "outputs": [],
-      "inputs": [
-        "src/**/*",
-        "package.json",
-        "tsconfig.json"
-      ]
+    "typecheck": {
+      "outputs": ["tsconfig.tsbuildinfo"]
     }
   },
   "globalDependencies": [
-    "package.json",
-    "pnpm-lock.yaml"
+    ".eslintrc.js",
+    ".eslintignore",
+    ".lintstagedrc.js",
+    ".prettierrc.yaml",
+    "tsconfig.base.json",
+    "tsconfig.build.json",
+    "tsconfig.json"
   ]
 }
