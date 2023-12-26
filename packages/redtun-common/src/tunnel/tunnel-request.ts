@@ -48,7 +48,7 @@ export class WritableTunnelRequest extends Writable {
 
   _destroy(e: Error, callback: (...args: any[]) => void) {
     if (e) {
-      this._socket.emit("request-pipe-error", this._requestId, e && e.message);
+      this._socket.emit("request-pipe-error", this._requestId, e);
       this._socket.conn.once("drain", () => {
         callback();
       });

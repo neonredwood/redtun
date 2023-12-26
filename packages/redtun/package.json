@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "clean:build": "rimraf ./dist",
-    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "dev": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only src/index.ts",
     "lint": "eslint . --ext .js,.ts",
     "lint:fix": "pnpm lint --fix",
     "test": "jest",
@@ -39,7 +39,6 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@neonredwood/redtun-common": "^1.0.0",
     "commander": "^9.0.0",
     "https-proxy-agent": "^7.0.2",
     "socket.io": "^4.7.2",

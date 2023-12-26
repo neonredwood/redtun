@@ -2,7 +2,7 @@ import {
   TunnelResponse,
   TunnelResponseMeta,
   WritableTunnelRequest,
-} from "@neonredwood/redtun-common";
+} from "packages/redtun-common/src/tunnel";
 import dotenv from "dotenv";
 import express from "express";
 import * as http from "http";
@@ -48,7 +48,7 @@ const removeTunnelSocket = (forwardDomain: string) => {
 };
 
 const getAvailableTunnelSocket = (host: string) => {
-  return getTunnelSocket(host)?.socket!;
+  return getTunnelSocket(host)?.socket;
 };
 
 io.use((socket, next) => {
@@ -169,7 +169,7 @@ app.use("/", (req, res) => {
     },
   });
   const onReqError = (e: Error) => {
-    tunnelRequest.destroy(new Error(e.message ?? "Aborted"));
+    tunnelRequest.destroy(e);
   };
   req.once("aborted", onReqError);
   req.once("error", onReqError);
@@ -206,7 +206,8 @@ app.use("/", (req, res) => {
   tunnelResponse.pipe(res);
   const onSocketError = () => {
     res.off("close", onResClose);
-    res.end(500);
+    res.sendStatus(500);
+    res.end();
   };
   const onResClose = () => {
     tunnelSocket.off("disconnect", onSocketError);

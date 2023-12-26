@@ -41,7 +41,7 @@ export class TunnelResponse extends Duplex {
         }
       };
       const onResponsePipe = (responseId: string, data: any) => {
-        console.debug("onResponsePipe", responseId, data);
+        console.debug("onResponsePipe", this._responseId, responseId, data);
         if (this._responseId === responseId) {
           this.push(data);
         }
@@ -147,7 +147,7 @@ export class TunnelResponse extends Duplex {
       this._socket.emit(
         "response-pipe-error",
         this._responseId,
-        e && e.message,
+        e,
       );
       if ((this._socket as any).conn) {
         (this._socket as any).conn.once("drain", () => {

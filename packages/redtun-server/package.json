@@ -5,9 +5,9 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
+    "build": "tsc -b tsconfig.build.json",
     "clean:build": "rimraf ./dist",
-    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "dev": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only src/index.ts",
     "lint": "eslint . --ext .js,.ts",
     "lint:fix": "pnpm lint --fix",
     "test": "jest",
@@ -40,7 +40,6 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@neonredwood/redtun-common": "^1.0.0",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "morgan": "^1.10.0",

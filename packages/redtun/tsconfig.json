@@ -4,6 +4,12 @@
     "outDir": "./dist/",
     "rootDir": "./src/"
   },
-
-  "include": ["src/**/*.ts"]
+  "include": [
+    "src/**/*.ts"
+  ],
+  "references": [
+    {
+      "path": "../redtun-common/"
+    }
+  ],
 }

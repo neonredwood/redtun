@@ -1,7 +1,7 @@
 import {
   ReadableTunnelRequest,
   TunnelResponse,
-} from "@neonredwood/redtun-common";
+} from "packages/redtun-common/src/tunnel";
 import { Argument, Command } from "commander";
 import fs from "fs";
 import http from "http";
@@ -57,7 +57,7 @@ const initClient = (options: InitOptions) => {
   });
 
   socket.on("connect_error", (e) => {
-    console.log("connect error", e && e.message);
+    console.log("connect error", e);
   });
 
   socket.on("disconnect", () => {
@@ -112,7 +112,7 @@ const initClient = (options: InitOptions) => {
     const onLocalError = (error: Error) => {
       console.log(error);
       localReq.off("response", onLocalResponse);
-      socket.emit("request-error", requestId, error && error.message);
+      socket.emit("request-error", requestId, error);
       tunnelRequest.destroy(error);
     };
     const onUpgrade = (
