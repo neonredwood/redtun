@@ -17,6 +17,10 @@
       "dependsOn": ["^build"],
       "outputs": ["dist/**", "tsconfig.tsbuildinfo"]
     },
+    "build:dist": {
+      "dependsOn": ["^build:dist"],
+      "outputs": ["dist/*.bundle.js"]
+    },
     "clean:build": {
       "dependsOn": ["build"]
     },

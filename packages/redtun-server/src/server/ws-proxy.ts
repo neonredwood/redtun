@@ -1,5 +1,5 @@
 import * as http from "http";
-import { TunnelResponse, TunnelResponseMeta, WritableTunnelRequest } from "packages/redtun-common/src/tunnel";
+import { TunnelResponse, TunnelResponseMeta, WritableTunnelRequest } from ":redtun-common/tunnel";
 import internal from "stream";
 import { v4 as uuidV4 } from "uuid";
 import { ClientManager } from "./client-manager";

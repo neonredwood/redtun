@@ -13,7 +13,7 @@
     "declarationMap": true,
     "composite": true,
     "paths": {
-      ":redtun-common": ["./packages/redtun-common/src/*"]
+      ":redtun-common/*": ["./packages/redtun-common/src/*"]
     }
   },
   "exclude": ["node_modules", "**/*.spec.ts", "**/*.test.ts"]

@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 import { Request, Response } from "express";
-import { TunnelResponse, WritableTunnelRequest } from "packages/redtun-common/src/tunnel";
+import { TunnelResponse, WritableTunnelRequest } from ":redtun-common/tunnel";
 import { v4 as uuidV4 } from "uuid";
 import { ClientManager } from "./client-manager";
 import { getReqHeaders } from "./http-util";
