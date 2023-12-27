@@ -19,7 +19,7 @@
       "type": "node-terminal",
       "request": "launch",
       "cwd": "${workspaceFolder}/",
-      "command": "pnpm  -C ./packages/redtun  dev  -- start server 3000 -o def"
-    },
+      "command": "pnpm  -C ./packages/redtun dev -- start server 3000 -d def"
+    }
   ]
 }

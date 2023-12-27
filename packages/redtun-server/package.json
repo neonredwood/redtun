@@ -10,6 +10,8 @@
     "dev": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only src/index.ts",
     "lint": "eslint . --ext .js,.ts",
     "lint:fix": "pnpm lint --fix",
+    "format": "prettier --check .",
+    "format:fix": "prettier --write .",
     "test": "jest",
     "typecheck": "tsc"
   },

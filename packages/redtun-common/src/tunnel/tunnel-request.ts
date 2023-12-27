@@ -1,4 +1,4 @@
-import { Request } from "express";
+import { RequestOptions } from "http";
 import { Socket } from "socket.io";
 import { Socket as ClientSocket } from "socket.io-client";
 import { Readable, Writable } from "stream";
@@ -7,43 +7,40 @@ export class WritableTunnelRequest extends Writable {
   private _socket: Socket;
   private _requestId: string;
 
-  constructor({
-    socket,
-    requestId,
-    request,
-  }: {
-    socket: Socket;
-    requestId: string;
-    request: Partial<Request>;
-  }) {
+  constructor({ socket, requestId, request }: { socket: Socket; requestId: string; request: Partial<RequestOptions> }) {
     super();
     this._socket = socket;
     this._requestId = requestId;
+    console.debug(`tunnel-request: emit request ${this._requestId}`);
     this._socket.emit("request", requestId, request);
   }
 
-  _write(chunk: any, encoding: string, callback: (...args: any[]) => void) {
+  _write(chunk: any, encoding: BufferEncoding, callback: (error?: Error | null) => void): void {
+    console.debug(`tunnel-request: emit request-pipe ${this._requestId} ${chunk.length}`);
     this._socket.emit("request-pipe", this._requestId, chunk);
     this._socket.conn.once("drain", () => {
       callback();
     });
   }
 
-  _writev(
-    chunks: { chunk: any; encoding: BufferEncoding }[],
-    callback: (...args: any[]) => void,
-  ) {
+  _writev(chunks: { chunk: any; encoding: BufferEncoding }[], callback: (...args: any[]) => void) {
+    console.debug(`tunnel-request: emit request-pipes ${this._requestId} ${chunks.length}`);
     this._socket.emit("request-pipes", this._requestId, chunks);
     this._socket.conn.once("drain", () => {
       callback();
     });
   }
 
-  _final(callback: (...args: any[]) => void) {
+  final(callback: (...args: any[]) => void) {
+    console.debug(`tunnel-request: emit request-pipe-end ${this._requestId}`);
     this._socket.emit("request-pipe-end", this._requestId);
     this._socket.conn.once("drain", () => {
       callback();
     });
+  }
+
+  finish() {
+    this.final(() => {});
   }
 
   _destroy(e: Error, callback: (...args: any[]) => void) {
@@ -61,30 +58,26 @@ export class WritableTunnelRequest extends Writable {
 export class ReadableTunnelRequest extends Readable {
   private _socket: ClientSocket;
   private _requestId: string;
-
-  constructor({
-    socket,
-    requestId,
-  }: {
-    socket: ClientSocket;
-    requestId: string;
-  }) {
+  constructor({ socket, requestId }: { socket: ClientSocket; requestId: string }) {
     super();
     this._socket = socket;
     this._requestId = requestId;
-    const onRequestPipe = (requestId: string, data: any[]) => {
+    const onRequestPipe = (requestId: string, data: any) => {
+      console.debug(`tunnel-request: request-pipe ${this._requestId} <=> ${requestId}: ${data.length}`);
       if (this._requestId === requestId) {
         this.push(data);
       }
     };
     const onRequestPipes = (requestId: string, data: any[]) => {
+      console.debug(`tunnel-request: request-pipes ${this._requestId} <=> ${requestId}: ${data.length}`);
       if (this._requestId === requestId) {
-        data.forEach((chunk) => {
+        data.forEach(chunk => {
           this.push(chunk);
         });
       }
     };
     const onRequestPipeError = (requestId: string, error: Error) => {
+      console.debug(`tunnel-request: request-pipe-error ${this._requestId} <=> ${requestId}: ${error.message}`);
       if (this._requestId === requestId) {
         this._socket.off("request-pipe", onRequestPipe);
         this._socket.off("request-pipes", onRequestPipes);
@@ -93,7 +86,8 @@ export class ReadableTunnelRequest extends Readable {
         this.destroy(error);
       }
     };
-    const onRequestPipeEnd = (requestId: string, data: any[]) => {
+    const onRequestPipeEnd = (requestId: string, data: any) => {
+      console.debug(`tunnel-request: request-pipe-end ${this._requestId} <=> ${requestId}: ${data?.length}`);
       if (this._requestId === requestId) {
         this._socket.off("request-pipe", onRequestPipe);
         this._socket.off("request-pipes", onRequestPipes);

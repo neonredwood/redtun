@@ -2,9 +2,7 @@
   "compilerOptions": {
     "target": "es2020",
     "module": "commonjs",
-    "lib": [
-      "esnext"
-    ],
+    "lib": ["esnext"],
     "baseUrl": ".",
     "strict": true,
     "esModuleInterop": true,
@@ -15,14 +13,8 @@
     "declarationMap": true,
     "composite": true,
     "paths": {
-      ":redtun-common": [
-        "./packages/redtun-common/src/*"
-      ],
+      ":redtun-common": ["./packages/redtun-common/src/*"]
     }
   },
-  "exclude": [
-    "node_modules",
-    "**/*.spec.ts",
-    "**/*.test.ts"
-  ],
+  "exclude": ["node_modules", "**/*.spec.ts", "**/*.test.ts"]
 }
