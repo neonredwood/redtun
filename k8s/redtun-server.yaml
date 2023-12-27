@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: redtun-server
+spec:
+  selector:
+    app: redtun
+    tier: web
+  type: NodePort
+  ports:
+    - name: http
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redtun-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redtun
+      tier: web
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        app: redtun
+        tier: web
+    spec:
+      containers:
+        - name: web
+          image: phibit/redtun-server:latest
+          ports:
+            - name: http
+              containerPort: 3000
+          resources:
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          readinessProbe:
+            initialDelaySeconds: 3
+            failureThreshold: 1
+            periodSeconds: 10
+            tcpSocket:
+              port: 3000
+          livenessProbe:
+            initialDelaySeconds: 3
+            failureThreshold: 1
+            periodSeconds: 10
+            tcpSocket:
+              port: 3000

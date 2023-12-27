@@ -1,0 +1,11 @@
+README.md
+.env*.local
+docker
+*.dockerfile
+k8s/
+.git
+.turbo
+node_modules
+**/node_modules
+out/
+docs/
