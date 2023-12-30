@@ -40,7 +40,7 @@ program
     let config: Partial<RedtunConfig> = {};
     const configFilePath = path.resolve(configDir, `${options.profile}.json`);
     if (fs.existsSync(configFilePath)) {
-      config = JSON.parse(fs.readFileSync(configFilePath, "utf8"));
+      config = JSON.parse(fs.readFileSync(configFilePath, "utf8")) as RedtunConfig;
     }
 
     if (!config.server) {
@@ -61,12 +61,16 @@ program
     });
   });
 
+type CliConfigOptions = {
+  profile: string;
+};
+
 program
   .command("config")
   .addArgument(new Argument("<type>", "config type").choices(["api-key", "server"]))
   .argument("<value>", "config value")
   .option("-p --profile <string>", "setting profile name", "default")
-  .action((type, value, options) => {
+  .action((type: string, value: string, options: CliConfigOptions) => {
     const configDir = path.resolve(os.homedir(), ".redtun");
     if (!fs.existsSync(configDir)) {
       fs.mkdirSync(configDir);
@@ -74,7 +78,7 @@ program
     let config: Partial<RedtunConfig> = {};
     const configFilePath = path.resolve(configDir, `${options.profile}.json`);
     if (fs.existsSync(configFilePath)) {
-      config = JSON.parse(fs.readFileSync(configFilePath, "utf8"));
+      config = JSON.parse(fs.readFileSync(configFilePath, "utf8")) as RedtunConfig;
     }
     if (type === "api-key") {
       config.apiKey = value;
@@ -84,37 +88,6 @@ program
     }
     fs.writeFileSync(configFilePath, JSON.stringify(config, null, 2));
     console.log(`${type} config saved successfully`);
-  });
-
-program
-  .command("auth")
-  .argument("<username>", "JWT generator username")
-  .argument("<password>", "JWT generator password")
-  .option("-p --profile <string>", "setting profile name", "default")
-  .action(async (username, password, options) => {
-    const configFilePath = path.resolve(os.homedir(), ".lite-http-tunnel", `${options.profile}.json`);
-    if (!fs.existsSync(configFilePath)) {
-      console.log("Please config server firstly");
-      return;
-    }
-    const config = JSON.parse(fs.readFileSync(configFilePath, "utf8"));
-    const server = config.server;
-    if (!server) {
-      console.log("Please config server firstly");
-      return;
-    }
-    const queryParams = new URLSearchParams();
-    queryParams.append("username", username);
-    queryParams.append("password", password);
-    const response = await fetch(`${server}/tunnel_jwt_generator?${queryParams.toString()}`);
-    if (response.status >= 400) {
-      console.log("Auth failed as server response error, status: ", response.status);
-      return;
-    }
-    const jwt = await response.text();
-    config.jwtToken = jwt;
-    fs.writeFileSync(configFilePath, JSON.stringify(config, null, 2));
-    console.log("Auth success");
   });
 
 export default program;
