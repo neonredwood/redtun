@@ -17,7 +17,7 @@ type CliStartOptions = {
 
 const program = new Command();
 
-program.name("redtun").description("HTTP tunnel client");
+program.name("redtun").description("redtun HTTP tunnel client");
 
 program
   .command("start")

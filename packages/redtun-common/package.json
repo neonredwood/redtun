@@ -14,7 +14,7 @@
     "typecheck": "tsc"
   },
   "keywords": [],
-  "author": "phil@neonredwood.com",
+  "author": "Phil Kallos <phil@neonredwood.com>",
   "private": true,
   "license": "GPLV3",
   "devDependencies": {

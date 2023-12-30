@@ -28,6 +28,7 @@ const config: webpack.Configuration = {
     }),
     new webpack.IgnorePlugin({ resourceRegExp: /pty.js/, contextRegExp: /blessed\/lib\/widgets$/ }),
     new webpack.IgnorePlugin({ resourceRegExp: /term.js/, contextRegExp: /blessed\/lib\/widgets$/ }),
+    new webpack.BannerPlugin({ banner: "#!/usr/bin/env node", raw: true }),
   ],
   module: {
     rules: [
