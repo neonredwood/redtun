@@ -4,7 +4,7 @@ import http from "http";
 import { Socket as NetSocket } from "net";
 import { ManagerOptions, Socket, SocketOptions, io } from "socket.io-client";
 import { RedtunConfig } from "../cli";
-import { addHttpResponse, updateStatusContent } from "./display";
+import { createDisplay } from "./display";
 
 const logger = getLogger("client");
 
@@ -37,6 +37,8 @@ export const initClient = (options: InitOptions) => {
   if (options.domain && initParams.extraHeaders) {
     initParams.extraHeaders["x-forwardme-domain"] = options.domain;
   }
+
+  const { updateStatusContent, addHttpResponse } = createDisplay();
 
   updateStatusContent({
     sessionStatus: "disconnected",

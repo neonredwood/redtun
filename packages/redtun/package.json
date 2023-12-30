@@ -12,10 +12,12 @@
     "format": "prettier --check .",
     "format:fix": "prettier --write .",
     "test": "jest",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "publish-packages": "pnpm build:dist && changeset version && changeset publish"
   },
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "bin": "./dist/client.bundle.js",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "keywords": [
     "redtun",
     "tunnel",
@@ -23,7 +25,7 @@
     "ngrok",
     "client"
   ],
-  "author": "phil@neonredwood.com",
+  "author": "Phil Kallos <phil@neonredwood.com>",
   "license": "GPLV3",
   "devDependencies": {
     "@jest/types": "^29.6.3",

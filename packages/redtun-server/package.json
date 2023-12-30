@@ -23,7 +23,7 @@
     "ngrok",
     "client"
   ],
-  "author": "phil@neonredood.com",
+  "author": "Phil Kallos <phil@neonredwood.com>",
   "license": "GPLV3",
   "devDependencies": {
     "@jest/types": "^29.6.3",

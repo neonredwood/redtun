@@ -3,127 +3,134 @@ import { green, red, white } from "kolorist";
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-var-requires
 const { version } = require("../../package.json");
 
-// Create a screen object.
-const screen = blessed.screen({
-  smartCSR: true,
-  title: `Redtun client v${version}`,
-});
+export const createDisplay = () => {
+  // Create a screen object.
+  const screen = blessed.screen({
+    smartCSR: true,
+    title: `Redtun client v${version}`,
+  });
 
-// Create a box to display the status.
-const statusBox = blessed.box({
-  top: "0%",
-  left: "0%",
-  width: "100%",
-  height: "150",
-  content: "",
-  label: "Status",
-  border: {
-    type: "line",
-  },
-  style: {
-    fg: "white",
-    bg: "black",
+  // Create a box to display the status.
+  const statusBox = blessed.box({
+    top: "0%",
+    left: "0%",
+    width: "100%",
+    height: "150",
+    content: "",
+    label: "Status",
     border: {
-      fg: "#f0f0f0",
+      type: "line",
     },
-  },
-});
-
-// Append the box to the screen.
-screen.append(statusBox);
-
-// Create a box to display the status.
-const requestBox = blessed.box({
-  top: "150",
-  left: "0%",
-  width: "100%",
-  label: "Requests",
-  content: "",
-  border: {
-    type: "line",
-  },
-  style: {
-    fg: "white",
-    bg: "black",
-    boder: {
-      fg: "#f0f0f0",
+    style: {
+      fg: "white",
+      bg: "black",
+      border: {
+        fg: "#f0f0f0",
+      },
     },
-  },
-});
+  });
 
-// Append the box to the screen.
-screen.append(requestBox);
-// Quit on Escape, q, or Control-C.
-screen.key(["escape", "q", "C-c"], () => {
-  return process.exit(0);
-});
+  // Append the box to the screen.
+  screen.append(statusBox);
 
-type StatusContent = {
-  sessionStatus: "connected" | "disconnected";
-  serverUrl: string;
-  domain: string;
-  localhost: string;
-  port: number;
-};
+  // Create a box to display the status.
+  const requestBox = blessed.box({
+    top: "150",
+    left: "0%",
+    width: "100%",
+    label: "Requests",
+    content: "",
+    border: {
+      type: "line",
+    },
+    style: {
+      fg: "white",
+      bg: "black",
+      boder: {
+        fg: "#f0f0f0",
+      },
+    },
+  });
 
-let status: StatusContent = {
-  sessionStatus: "disconnected",
-  serverUrl: "",
-  domain: "",
-  localhost: "",
-  port: 3000,
-};
+  // Append the box to the screen.
+  screen.append(requestBox);
+  // Quit on Escape, q, or Control-C.
+  screen.key(["escape", "q", "C-c"], () => {
+    return process.exit(0);
+  });
 
-export const updateStatusContent = (opts: Partial<StatusContent>) => {
-  status = {
-    ...status,
-    ...opts,
+  type StatusContent = {
+    sessionStatus: "connected" | "disconnected";
+    serverUrl: string;
+    domain: string;
+    localhost: string;
+    port: number;
   };
-  statusBox.setContent(
-    `Session status:\t\t${
-      status.sessionStatus === "connected" ? green(status.sessionStatus) : red(status.sessionStatus)
-    }\n` +
-      `Tunner Server: \t\t${status.serverUrl}\n` +
-      `Forwarding:\t\t\thttp(s)://${status.domain} -> ${status.localhost}:${status.port}\n`,
-  );
-  screen.render();
-};
 
-type HttpRes = {
-  method: string;
-  path: string;
-  statusCode: number;
-  statusMessage: string;
-};
+  let status: StatusContent = {
+    sessionStatus: "disconnected",
+    serverUrl: "",
+    domain: "",
+    localhost: "",
+    port: 3000,
+  };
 
-const httpResponses: HttpRes[] = [];
+  const updateStatusContent = (opts: Partial<StatusContent>) => {
+    status = {
+      ...status,
+      ...opts,
+    };
+    statusBox.setContent(
+      `Session status:\t\t${
+        status.sessionStatus === "connected" ? green(status.sessionStatus) : red(status.sessionStatus)
+      }\n` +
+        `Tunner Server: \t\t${status.serverUrl}\n` +
+        `Forwarding:\t\t\thttp(s)://${status.domain} -> ${status.localhost}:${status.port}\n`,
+    );
+    screen.render();
+  };
 
-export const addHttpResponse = (res: HttpRes) => {
-  httpResponses.unshift(res);
-  httpResponses.slice(0, 100);
-  const colorCode = (code: number) => {
-    if (code >= 500) {
-      return red;
-    }
-    if (code >= 400) {
-      return red;
-    }
-    if (code >= 300) {
+  type HttpRes = {
+    method: string;
+    path: string;
+    statusCode: number;
+    statusMessage: string;
+  };
+
+  const httpResponses: HttpRes[] = [];
+
+  const addHttpResponse = (res: HttpRes) => {
+    httpResponses.unshift(res);
+    httpResponses.slice(0, 100);
+    const colorCode = (code: number) => {
+      if (code >= 500) {
+        return red;
+      }
+      if (code >= 400) {
+        return red;
+      }
+      if (code >= 300) {
+        return white;
+      }
+      if (code >= 200) {
+        return green;
+      }
       return white;
-    }
-    if (code >= 200) {
-      return green;
-    }
-    return white;
+    };
+
+    requestBox.setContent(
+      httpResponses
+        .map(r => {
+          const color = colorCode(r.statusCode);
+          return `${r.method} ${r.path} ${color(r.statusCode)} ${color(r.statusMessage)}`;
+        })
+        .join("\n"),
+    );
+    screen.render();
   };
 
-  requestBox.setContent(
-    httpResponses
-      .map(r => {
-        const color = colorCode(r.statusCode);
-        return `${r.method} ${r.path} ${color(r.statusCode)} ${color(r.statusMessage)}`;
-      })
-      .join("\n"),
-  );
-  screen.render();
+  return {
+    updateStatusContent,
+    addHttpResponse,
+  };
 };
