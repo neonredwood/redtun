@@ -1,14 +1,12 @@
-import dotenv from "dotenv";
 import express from "express";
 import * as http from "http";
 import morgan from "morgan";
 import { Server, Socket } from "socket.io";
-import { authMiddleWare, tokenHandler } from "./auth";
+import { authMiddleWare } from "./auth";
 import { ClientManager } from "./client-manager";
+import { proxyHttpRequest } from "./http-proxy";
 import { WebTunnelPath, handleWs } from "./ws-proxy";
 import { onConnection, tunnelMiddleware } from "./ws-tunnel";
-import { proxyHttpRequest } from "./http-proxy";
-dotenv.config();
 
 // Initialize server code, websockets code
 const app = express();
@@ -25,7 +23,6 @@ io.on("connection", (socket: Socket) => onConnection(clientManager, socket));
 
 // Configure express app
 app.use(morgan("tiny"));
-app.get("/tunnel_jwt_generator", tokenHandler);
 app.use("/", (req, res) => proxyHttpRequest(clientManager, req, res));
 
 httpServer.on("upgrade", (req, socket, head) => handleWs(clientManager, req, socket, head));

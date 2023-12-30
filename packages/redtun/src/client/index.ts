@@ -3,6 +3,7 @@ import { HttpsProxyAgent } from "https-proxy-agent";
 import { Socket as NetSocket } from "net";
 import { ReadableTunnelRequest, TunnelResponse } from "packages/redtun-common/src/tunnel";
 import { ManagerOptions, Socket, SocketOptions, io } from "socket.io-client";
+import { RedtunConfig } from "../cli";
 
 let socketRef: Socket | undefined = undefined;
 
@@ -15,11 +16,9 @@ const keepAlive = () => {
   }, 5000);
 };
 
-type InitOptions = {
-  server: string;
-  jwtToken: string;
+type InitOptions = RedtunConfig & {
   domain: string;
-  host: string;
+  localhost: string;
   port: number;
 };
 
@@ -28,7 +27,7 @@ export const initClient = (options: InitOptions) => {
     path: "/$web_tunnel",
     transports: ["websocket"],
     auth: {
-      token: options.jwtToken,
+      token: options.apiKey,
     },
     extraHeaders: {},
   };
@@ -67,7 +66,7 @@ export const initClient = (options: InitOptions) => {
     console.log(`${isWebSocket ? "WS" : request.method}: `, request.path, requestId);
 
     request.port = options.port;
-    request.hostname = options.host;
+    request.hostname = options.localhost;
 
     const localReq = http.request(request);
     tunnelRequest.pipe(localReq);
