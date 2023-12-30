@@ -20,7 +20,8 @@
     "format:fix": "prettier --write .",
     "test": "turbo run --parallel test",
     "typecheck": "turbo run --parallel typecheck",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "publish-packages": "turbo build:dist --filter=@neonredwood/redtun && changeset version && changeset publish"
   },
   "keywords": [],
   "author": "phil@neonredwood.com",

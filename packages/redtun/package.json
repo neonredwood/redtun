@@ -13,7 +13,7 @@
     "format:fix": "prettier --write .",
     "test": "jest",
     "typecheck": "tsc",
-    "publish-packages": "pnpm build:dist && changeset version && changeset publish"
+    "publish-packages": "turbo build:dist && changeset version && changeset publish"
   },
   "bin": "./dist/client.bundle.js",
   "main": "./dist/index.js",
@@ -25,6 +25,9 @@
     "ngrok",
     "client"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "author": "Phil Kallos <phil@neonredwood.com>",
   "license": "GPLV3",
   "devDependencies": {
