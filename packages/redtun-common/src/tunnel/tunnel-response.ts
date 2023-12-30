@@ -10,12 +10,13 @@ export type TunnelResponseMeta = {
   headers: Record<string, string>;
 };
 
-function isServerSocket(o: any): o is Socket {
+function isServerSocket(o: unknown): o is Socket {
   return !isClientSocket(o);
 }
 
-function isClientSocket(o: any): o is ClientSocket {
-  return o.io?.engine?.transport?.name === "websocket";
+function isClientSocket(o: unknown): o is ClientSocket {
+  if (typeof o === "undefined") return false;
+  return (o as ClientSocket).io?.engine?.transport?.name === "websocket";
 }
 
 export class TunnelResponse<T extends Socket | ClientSocket> extends Duplex {
@@ -41,7 +42,7 @@ export class TunnelResponse<T extends Socket | ClientSocket> extends Duplex {
           });
         }
       };
-      const onResponsePipe = (responseId: string, chunk: any, encoding: BufferEncoding) => {
+      const onResponsePipe = (responseId: string, chunk: string | Buffer, encoding: BufferEncoding) => {
         console.debug(`tunnel-response: response-pipe ${this._responseId} <=> ${responseId}: ${chunk.length}`);
         if (this._responseId === responseId) {
           this.push(chunk, encoding);
@@ -50,7 +51,7 @@ export class TunnelResponse<T extends Socket | ClientSocket> extends Duplex {
       const onResponsePipes = (
         responseId: string,
         data: {
-          chunk: any;
+          chunk: string | Buffer;
           encoding: BufferEncoding;
         }[],
       ) => {
@@ -72,7 +73,7 @@ export class TunnelResponse<T extends Socket | ClientSocket> extends Duplex {
         this._socket.off("response-pipe-end", onResponsePipeEnd);
         this.destroy(new Error(error.message));
       };
-      const onResponsePipeEnd = (responseId: string, data?: any) => {
+      const onResponsePipeEnd = (responseId: string, data?: string | Buffer) => {
         console.debug(`tunnel-response: response-pipe-end ${this._responseId} <=> ${responseId}`);
         if (this._responseId !== responseId) {
           return;
@@ -123,7 +124,7 @@ export class TunnelResponse<T extends Socket | ClientSocket> extends Duplex {
 
   _read() {}
 
-  private drainCallback(callback: (...args: any[]) => void) {
+  private drainCallback(callback: (error?: Error | null) => void) {
     if (isServerSocket(this._socket)) {
       this._socket.conn.once("drain", () => {
         callback();
@@ -135,30 +136,30 @@ export class TunnelResponse<T extends Socket | ClientSocket> extends Duplex {
     }
   }
 
-  _write(chunk: any, encoding: BufferEncoding, callback: (error?: Error | null) => void): void {
+  _write(chunk: string | Buffer, encoding: BufferEncoding, callback: (error?: Error | null) => void): void {
     this._socket.emit("response-pipe", this._responseId, chunk, encoding);
     this.drainCallback(callback);
   }
 
   _writev(
     chunks: {
-      chunk: any;
+      chunk: string | Buffer;
       encoding: BufferEncoding;
     }[],
-    callback: (...args: any[]) => void,
+    callback: (error?: Error | null) => void,
   ) {
     this._socket.emit("response-pipes", this._responseId, chunks);
     this.drainCallback(callback);
   }
 
-  _final(callback: (...args: any[]) => void) {
+  _final(callback: (error?: Error | null) => void): void {
     this._socket.emit("response-pipe-end", this._responseId);
     this.drainCallback(callback);
   }
 
-  _destroy(e: Error, callback: (...args: any[]) => void) {
-    if (e) {
-      this._socket.emit("response-pipe-error", this._responseId, e);
+  _destroy(error: Error | null, callback: (error?: Error | null) => void): void {
+    if (error) {
+      this._socket.emit("response-pipe-error", this._responseId, TypeError);
       this.drainCallback(callback);
       return;
     }

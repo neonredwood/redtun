@@ -1,5 +1,4 @@
 import http from "http";
-import { HttpsProxyAgent } from "https-proxy-agent";
 import { Socket as NetSocket } from "net";
 import { ReadableTunnelRequest, TunnelResponse } from "packages/redtun-common/src/tunnel";
 import { ManagerOptions, Socket, SocketOptions, io } from "socket.io-client";
@@ -34,10 +33,7 @@ export const initClient = (options: InitOptions) => {
   if (options.domain && initParams.extraHeaders) {
     initParams.extraHeaders["x-forwardme-domain"] = options.domain;
   }
-  const httpProxy = process.env.https_proxy || process.env.http_proxy;
-  if (httpProxy) {
-    initParams.agent = new HttpsProxyAgent(httpProxy) as any;
-  }
+
   const socket = io(options.server, initParams);
   socketRef = socket;
 

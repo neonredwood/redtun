@@ -27,7 +27,6 @@
   "license": "GPLV3",
   "devDependencies": {
     "@jest/types": "^29.6.3",
-    "@types/commander": "^2.12.2",
     "@types/jest": "^29.5.11",
     "@types/webpack-node-externals": "^3.0.0",
     "@types/ws": "^8.5.10",
@@ -49,7 +48,6 @@
   },
   "dependencies": {
     "commander": "^9.0.0",
-    "https-proxy-agent": "^7.0.2",
     "socket.io": "^4.7.2",
     "socket.io-client": "^4.7.2",
     "ts-node": "^10.9.2",

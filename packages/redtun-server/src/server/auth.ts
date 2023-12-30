@@ -1,5 +1,5 @@
 import { Socket } from "socket.io";
-export const authMiddleWare = (socket: Socket, next: (err?: any) => void) => {
+export const authMiddleWare = (socket: Socket, next: (err?: Error) => void) => {
   // Authentication via API key is disabled
   if (!process.env.REDTUN_API_KEY) {
     return next();
