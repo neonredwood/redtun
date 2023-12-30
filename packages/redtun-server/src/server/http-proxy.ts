@@ -1,10 +1,11 @@
-import dotenv from "dotenv";
-import { Request, Response } from "express";
+import { getLogger } from ":redtun-common/logging";
 import { TunnelResponse, WritableTunnelRequest } from ":redtun-common/tunnel";
+import { Request, Response } from "express";
 import { v4 as uuidV4 } from "uuid";
 import { ClientManager } from "./client-manager";
 import { getReqHeaders } from "./http-util";
-dotenv.config();
+
+const logger = getLogger("http-proxy");
 
 export const proxyHttpRequest = (clientManager: ClientManager, req: Request, res: Response) => {
   // Check if there is a valid host header
@@ -56,7 +57,7 @@ export const proxyHttpRequest = (clientManager: ClientManager, req: Request, res
   });
 
   const onRequestError = () => {
-    console.debug(`proxy-http: request error received, requestId=${requestId}`);
+    logger.debug(`request error received, requestId=${requestId}`);
     tunnelResponse.off("response", onResponse);
     tunnelResponse.destroy();
     res.status(502);
@@ -71,12 +72,12 @@ export const proxyHttpRequest = (clientManager: ClientManager, req: Request, res
     statusMessage: string;
     headers: Record<string, string>;
   }) => {
-    console.debug(`proxy-http: response received, requestId=${requestId}`);
+    logger.debug(`response received, requestId=${requestId}`);
     tunnelRequest.off("requestError", onRequestError);
     res.writeHead(statusCode, statusMessage, headers);
   };
   const onSocketError = () => {
-    console.debug(`proxy-http: socket error received, requestId=${requestId}`);
+    logger.debug(`socket error received, requestId=${requestId}`);
     res.off("close", onResClose);
     if (!res.headersSent) {
       res.sendStatus(500);
@@ -84,7 +85,7 @@ export const proxyHttpRequest = (clientManager: ClientManager, req: Request, res
     res.end();
   };
   const onResClose = () => {
-    console.debug(`proxy-http: response closed, requestId=${requestId}`);
+    logger.debug(`response closed, requestId=${requestId}`);
     tunnelSocket.off("disconnect", onSocketError);
   };
   tunnelResponse.once("requestError", onRequestError);

@@ -2,7 +2,7 @@ import { Argument, Command } from "commander";
 import fs from "fs";
 import os from "os";
 import path from "path";
-import { initClient } from "../client";
+import { initClient } from "../client/tunnel";
 
 export type RedtunConfig = {
   server: string;

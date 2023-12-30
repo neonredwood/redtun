@@ -26,6 +26,8 @@ const config: webpack.Configuration = {
       resourceRegExp: /canvas/,
       contextRegExp: /jsdom$/,
     }),
+    new webpack.IgnorePlugin({ resourceRegExp: /pty.js/, contextRegExp: /blessed\/lib\/widgets$/ }),
+    new webpack.IgnorePlugin({ resourceRegExp: /term.js/, contextRegExp: /blessed\/lib\/widgets$/ }),
   ],
   module: {
     rules: [

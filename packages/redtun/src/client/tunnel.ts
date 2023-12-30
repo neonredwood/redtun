@@ -1,8 +1,12 @@
+import { getLogger } from ":redtun-common/logging";
+import { ReadableTunnelRequest, TunnelResponse } from ":redtun-common/tunnel";
 import http from "http";
 import { Socket as NetSocket } from "net";
-import { ReadableTunnelRequest, TunnelResponse } from "packages/redtun-common/src/tunnel";
 import { ManagerOptions, Socket, SocketOptions, io } from "socket.io-client";
 import { RedtunConfig } from "../cli";
+import { addHttpResponse, updateStatusContent } from "./display";
+
+const logger = getLogger("client");
 
 let socketRef: Socket | undefined = undefined;
 
@@ -34,21 +38,38 @@ export const initClient = (options: InitOptions) => {
     initParams.extraHeaders["x-forwardme-domain"] = options.domain;
   }
 
+  updateStatusContent({
+    sessionStatus: "disconnected",
+    domain: options.domain,
+    localhost: options.localhost,
+    port: options.port,
+    serverUrl: options.server,
+  });
+
   const socket = io(options.server, initParams);
   socketRef = socket;
 
   socket.on("connect", () => {
+    updateStatusContent({
+      sessionStatus: "connected",
+      domain: options.domain,
+      localhost: options.localhost,
+      port: options.port,
+      serverUrl: options.server,
+    });
     if (socket?.connected) {
-      console.log(`client - Connected to server ${options.server} successfully`);
+      logger.debug(`Connected to server ${options.server} successfully`);
     }
   });
 
   socket.on("connect_error", e => {
-    console.error(`client - Error connecting: ${e.message}`);
+    logger.debug(`Error connecting: ${e.message}`);
+    updateStatusContent({ sessionStatus: "disconnected" });
   });
 
   socket.on("disconnect", () => {
-    console.log(`client - Disconnected`);
+    logger.debug(`Disconnected`);
+    updateStatusContent({ sessionStatus: "disconnected" });
   });
 
   socket.on("request", (requestId: string, request: http.RequestOptions) => {
@@ -59,7 +80,7 @@ export const initClient = (options: InitOptions) => {
       socket,
     });
 
-    console.log(`${isWebSocket ? "WS" : request.method}: `, request.path, requestId);
+    logger.debug(`${isWebSocket ? "WS" : request.method}: `, request.path, requestId);
 
     request.port = options.port;
     request.hostname = options.localhost;
@@ -91,11 +112,17 @@ export const initClient = (options: InitOptions) => {
         duplex: false,
       });
 
+      addHttpResponse({
+        method: request.method!,
+        path: request.path!,
+        statusCode: localRes.statusCode!,
+        statusMessage: localRes.statusMessage!,
+      });
       tunnelResponse.writeHead(localRes.statusCode, localRes.statusMessage, localRes.headers, localRes.httpVersion);
       localRes.pipe(tunnelResponse);
     };
     const onLocalError = (error: Error) => {
-      console.log(error);
+      logger.debug(error);
       localReq.off("response", onLocalResponse);
       socket.emit("request-error", requestId, error);
       tunnelRequest.destroy(error);

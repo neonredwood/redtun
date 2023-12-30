@@ -1,7 +1,10 @@
+import { getLogger } from ":redtun-common/logging";
 import * as http from "http";
 import { Socket } from "socket.io";
 import { Socket as ClientSocket } from "socket.io-client";
 import { Duplex } from "stream";
+
+const logger = getLogger("tunnel-response");
 
 export type TunnelResponseMeta = {
   httpVersion: string;
@@ -30,7 +33,7 @@ export class TunnelResponse<T extends Socket | ClientSocket> extends Duplex {
 
     if (duplex) {
       const onResponse = (responseId: string, data: TunnelResponseMeta) => {
-        console.debug(`tunnel-response: response ${this._responseId} <=> ${responseId}: ${JSON.stringify(data)}`);
+        logger.debug(`response ${this._responseId} <=> ${responseId}: ${JSON.stringify(data)}`);
         if (this._responseId === responseId) {
           this._socket.off("response", onResponse);
           this._socket.off("request-error", onRequestError);
@@ -43,7 +46,7 @@ export class TunnelResponse<T extends Socket | ClientSocket> extends Duplex {
         }
       };
       const onResponsePipe = (responseId: string, chunk: string | Buffer, encoding: BufferEncoding) => {
-        console.debug(`tunnel-response: response-pipe ${this._responseId} <=> ${responseId}: ${chunk.length}`);
+        logger.debug(`response-pipe ${this._responseId} <=> ${responseId}: ${chunk.length}`);
         if (this._responseId === responseId) {
           this.push(chunk, encoding);
         }
@@ -55,7 +58,7 @@ export class TunnelResponse<T extends Socket | ClientSocket> extends Duplex {
           encoding: BufferEncoding;
         }[],
       ) => {
-        console.debug(`tunnel-response: response-pipes ${this._responseId} <=> ${responseId}: ${data.length}`);
+        logger.debug(`response-pipes ${this._responseId} <=> ${responseId}: ${data.length}`);
         if (this._responseId === responseId) {
           data.forEach(data => {
             this.push(data.chunk, data.encoding);
@@ -66,7 +69,7 @@ export class TunnelResponse<T extends Socket | ClientSocket> extends Duplex {
         if (this._responseId !== responseId) {
           return;
         }
-        console.error(`tunnel-response: response-pipe-error ${this._responseId} <=> ${responseId}: ${error.code}`);
+        logger.error(`tunnel-response: response-pipe-error ${this._responseId} <=> ${responseId}: ${error.code}`);
         this._socket.off("response-pipe", onResponsePipe);
         this._socket.off("response-pipes", onResponsePipes);
         this._socket.off("response-pipe-error", onResponsePipeError);
@@ -74,7 +77,7 @@ export class TunnelResponse<T extends Socket | ClientSocket> extends Duplex {
         this.destroy(new Error(error.message));
       };
       const onResponsePipeEnd = (responseId: string, data?: string | Buffer) => {
-        console.debug(`tunnel-response: response-pipe-end ${this._responseId} <=> ${responseId}`);
+        logger.debug(`response-pipe-end ${this._responseId} <=> ${responseId}`);
         if (this._responseId !== responseId) {
           return;
         }
@@ -113,7 +116,7 @@ export class TunnelResponse<T extends Socket | ClientSocket> extends Duplex {
     headers: http.IncomingHttpHeaders,
     httpVersion: string,
   ) {
-    console.debug(`tunnel-response: Writing head ${this._responseId} <=> ${statusCode}: ${statusMessage}`);
+    logger.debug(`Writing head ${this._responseId} <=> ${statusCode}: ${statusMessage}`);
     this._socket.emit("response", this._responseId, {
       statusCode,
       statusMessage,

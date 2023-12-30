@@ -1,11 +1,13 @@
-import * as http from "http";
+import { getLogger } from ":redtun-common/logging";
 import { TunnelResponse, TunnelResponseMeta, WritableTunnelRequest } from ":redtun-common/tunnel";
+import * as http from "http";
 import internal from "stream";
 import { v4 as uuidV4 } from "uuid";
 import { ClientManager } from "./client-manager";
 import { createSocketHttpHeader, getReqHeaders } from "./http-util";
 
 export const WebTunnelPath = "/$web_tunnel";
+const logger = getLogger("server");
 
 export const handleWs = (
   clientManager: ClientManager,
@@ -19,7 +21,7 @@ export const handleWs = (
   if (req.url.indexOf(WebTunnelPath) === 0) {
     return;
   }
-  console.log(`WS ${req.url}`);
+  logger.info(`WS ${req.url}`);
   // proxy websocket request
   const tunnelSocket = clientManager.getClient(req.headers.host);
   if (!tunnelSocket) {
@@ -51,7 +53,7 @@ export const handleWs = (
     tunnelResponse.off("requestError", onRequestError);
     if (statusCode) {
       socket.once("error", () => {
-        console.log(`WS ${req.url} ERROR`);
+        logger.info(`WS ${req.url} ERROR`);
         // ignore error
       });
       // not upgrade event
@@ -61,13 +63,13 @@ export const handleWs = (
       return;
     }
     const onSocketError = (err: Error) => {
-      console.log(`WS ${req.url} ERROR`);
+      logger.info(`WS ${req.url} ERROR`);
       socket.off("end", onSocketEnd);
       tunnelSocket.off("disconnect", onTunnelError);
       tunnelResponse.destroy(err);
     };
     const onSocketEnd = () => {
-      console.log(`WS ${req.url} END`);
+      logger.info(`WS ${req.url} END`);
       socket.off("error", onSocketError);
       tunnelSocket.off("disconnect", onTunnelError);
       tunnelResponse.end();

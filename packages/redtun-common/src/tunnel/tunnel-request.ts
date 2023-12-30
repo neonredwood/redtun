@@ -1,7 +1,10 @@
+import { getLogger } from ":redtun-common/logging";
 import { RequestOptions } from "http";
 import { Socket } from "socket.io";
 import { Socket as ClientSocket } from "socket.io-client";
 import { Readable, Writable } from "stream";
+
+const logger = getLogger("tunnel-request");
 
 export class WritableTunnelRequest extends Writable {
   private _socket: Socket;
@@ -11,12 +14,12 @@ export class WritableTunnelRequest extends Writable {
     super();
     this._socket = socket;
     this._requestId = requestId;
-    console.debug(`tunnel-request: emit request ${this._requestId}`);
+    logger.debug(`emit request ${this._requestId}`);
     this._socket.emit("request", requestId, request);
   }
 
   _write(chunk: string | Buffer, encoding: BufferEncoding, callback: (error?: Error | null) => void): void {
-    console.debug(`tunnel-request: emit request-pipe ${this._requestId} ${chunk.length}`);
+    logger.debug(`emit request-pipe ${this._requestId} ${chunk.length}`);
     this._socket.emit("request-pipe", this._requestId, chunk);
     this._socket.conn.once("drain", () => {
       callback();
@@ -30,7 +33,7 @@ export class WritableTunnelRequest extends Writable {
     }>,
     callback: (error?: Error | null) => void,
   ): void {
-    console.debug(`tunnel-request: emit request-pipes ${this._requestId} ${chunks.length}`);
+    logger.debug(`emit request-pipes ${this._requestId} ${chunks.length}`);
     this._socket.emit("request-pipes", this._requestId, chunks);
     this._socket.conn.once("drain", () => {
       callback();
@@ -38,7 +41,7 @@ export class WritableTunnelRequest extends Writable {
   }
 
   final(callback: (...args: unknown[]) => void) {
-    console.debug(`tunnel-request: emit request-pipe-end ${this._requestId}`);
+    logger.debug(`emit request-pipe-end ${this._requestId}`);
     this._socket.emit("request-pipe-end", this._requestId);
     this._socket.conn.once("drain", () => {
       callback();
@@ -69,13 +72,13 @@ export class ReadableTunnelRequest extends Readable {
     this._socket = socket;
     this._requestId = requestId;
     const onRequestPipe = (requestId: string, data: string | Buffer) => {
-      console.debug(`tunnel-request: request-pipe ${this._requestId} <=> ${requestId}: ${data.length}`);
+      logger.debug(`request-pipe ${this._requestId} <=> ${requestId}: ${data.length}`);
       if (this._requestId === requestId) {
         this.push(data);
       }
     };
     const onRequestPipes = (requestId: string, data: unknown[]) => {
-      console.debug(`tunnel-request: request-pipes ${this._requestId} <=> ${requestId}: ${data.length}`);
+      logger.debug(`request-pipes ${this._requestId} <=> ${requestId}: ${data.length}`);
       if (this._requestId === requestId) {
         data.forEach(chunk => {
           this.push(chunk);
@@ -83,7 +86,7 @@ export class ReadableTunnelRequest extends Readable {
       }
     };
     const onRequestPipeError = (requestId: string, error: Error) => {
-      console.debug(`tunnel-request: request-pipe-error ${this._requestId} <=> ${requestId}: ${error.message}`);
+      logger.debug(`request-pipe-error ${this._requestId} <=> ${requestId}: ${error.message}`);
       if (this._requestId === requestId) {
         this._socket.off("request-pipe", onRequestPipe);
         this._socket.off("request-pipes", onRequestPipes);
@@ -93,7 +96,7 @@ export class ReadableTunnelRequest extends Readable {
       }
     };
     const onRequestPipeEnd = (requestId: string, data: string | Buffer) => {
-      console.debug(`tunnel-request: request-pipe-end ${this._requestId} <=> ${requestId}: ${data?.length}`);
+      logger.debug(`request-pipe-end ${this._requestId} <=> ${requestId}: ${data?.length}`);
       if (this._requestId === requestId) {
         this._socket.off("request-pipe", onRequestPipe);
         this._socket.off("request-pipes", onRequestPipes);
