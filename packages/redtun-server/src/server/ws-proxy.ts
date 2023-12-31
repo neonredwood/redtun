@@ -1,3 +1,4 @@
+import { WebTunnelPath } from ":redtun-common/constants";
 import { getLogger } from ":redtun-common/logging";
 import { TunnelResponse, TunnelResponseMeta, WritableTunnelRequest } from ":redtun-common/tunnel";
 import * as http from "http";
@@ -6,7 +7,6 @@ import { v4 as uuidV4 } from "uuid";
 import { ClientManager } from "./client-manager";
 import { createSocketHttpHeader, getReqHeaders } from "./http-util";
 
-export const WebTunnelPath = "/$web_tunnel";
 const logger = getLogger("server");
 
 export const handleWs = (

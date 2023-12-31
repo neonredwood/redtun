@@ -1,3 +1,4 @@
+import { WebTunnelPath } from ":redtun-common/constants";
 import { getLogger } from ":redtun-common/logging";
 import express from "express";
 import * as http from "http";
@@ -6,7 +7,7 @@ import { Server, Socket } from "socket.io";
 import { authMiddleWare } from "./auth";
 import { ClientManager } from "./client-manager";
 import { proxyHttpRequest } from "./http-proxy";
-import { WebTunnelPath, handleWs } from "./ws-proxy";
+import { handleWs } from "./ws-proxy";
 import { onConnection, tunnelMiddleware } from "./ws-tunnel";
 
 const logger = getLogger("server");

@@ -1,6 +1,6 @@
 {
   "name": "@neonredwood/redtun",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Tunnel client for redtun reverse proxy.",
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
@@ -11,9 +11,7 @@
     "lint:fix": "pnpm lint --fix",
     "format": "prettier --check .",
     "format:fix": "prettier --write .",
-    "test": "jest --passWithNoTests",
-    "typecheck": "tsc",
-    "publish-packages": "turbo lint format test build build:dist && changeset version && changeset publish"
+    "test": "jest --passWithNoTests"
   },
   "bin": "./dist/client.bundle.js",
   "main": "./dist/index.js",
@@ -22,12 +20,23 @@
     "redtun",
     "tunnel",
     "proxy",
-    "ngrok",
-    "client"
+    "client",
+    "nat",
+    "http",
+    "websockets"
   ],
   "publishConfig": {
     "access": "public"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/neonredwood/redtun.git",
+    "directory": "packages/redtun"
+  },
+  "bugs": {
+    "url": "https://github.com/neonredwood/redtun/issues"
+  },
+  "homepage": "https://github.com/neonredwood/redtun#readme",
   "author": "Phil Kallos <phil@neonredwood.com>",
   "license": "GPLV3",
   "devDependencies": {

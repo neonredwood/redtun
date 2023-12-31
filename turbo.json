@@ -35,9 +35,6 @@
     "format:fix": {},
     "test": {
       "dependsOn": ["build"]
-    },
-    "typecheck": {
-      "outputs": ["tsconfig.tsbuildinfo"]
     }
   },
   "globalDependencies": [

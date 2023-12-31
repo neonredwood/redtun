@@ -6,7 +6,7 @@ import { initClient } from "../client/tunnel";
 
 export type RedtunConfig = {
   server: string;
-  apiKey: string;
+  apiKey?: string;
 };
 
 type CliStartOptions = {
@@ -48,8 +48,7 @@ program
       return;
     }
     if (!config.apiKey) {
-      console.log(`Please set API key for ${config.server} first.`);
-      return;
+      console.warn(`Please set API key for ${config.server} first.`);
     }
 
     initClient({

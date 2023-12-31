@@ -1,3 +1,4 @@
+import { WebTunnelPath } from ":redtun-common/constants";
 import { getLogger } from ":redtun-common/logging";
 import { ReadableTunnelRequest, TunnelResponse } from ":redtun-common/tunnel";
 import http from "http";
@@ -27,7 +28,7 @@ type InitOptions = RedtunConfig & {
 
 export const initClient = (options: InitOptions) => {
   const initParams: Partial<ManagerOptions & SocketOptions> = {
-    path: "/$web_tunnel",
+    path: WebTunnelPath,
     transports: ["websocket"],
     auth: {
       token: options.apiKey,

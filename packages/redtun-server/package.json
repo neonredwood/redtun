@@ -1,6 +1,6 @@
 {
   "name": "@neonredwood/redtun-server",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Http reverse proxy for redtun",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -13,8 +13,7 @@
     "lint:fix": "pnpm lint --fix",
     "format": "prettier --check .",
     "format:fix": "prettier --write .",
-    "test": "jest --passWithNoTests",
-    "typecheck": "tsc"
+    "test": "jest --passWithNoTests"
   },
   "keywords": [
     "redtun",
