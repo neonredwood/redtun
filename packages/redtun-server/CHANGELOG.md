@@ -1,5 +1,11 @@
 # @neonredwood/redtun-server
 
+## 1.0.2
+
+### Patch Changes
+
+- logging improvements, npm packaging improvements
+
 ## 1.0.1
 
 ### Patch Changes

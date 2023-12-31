@@ -67,6 +67,7 @@ export const createDisplay = () => {
 
   type StatusContent = {
     sessionStatus: "connected" | "disconnected";
+    errorMessage?: string;
     serverUrl: string;
     domain: string;
     localhost: string;
@@ -86,10 +87,16 @@ export const createDisplay = () => {
       ...status,
       ...opts,
     };
+    const statusMessage = (status: Partial<StatusContent>) => {
+      const errorMessage = status.errorMessage ? `(${status.errorMessage})` : "";
+      const statusMessage =
+        status.sessionStatus === "connected" ? status.sessionStatus : `${status.sessionStatus} ${errorMessage}`;
+      const color = status.sessionStatus === "connected" ? green : red;
+      return color(statusMessage);
+    };
+
     statusBox.setContent(
-      `Session status:\t\t${
-        status.sessionStatus === "connected" ? green(status.sessionStatus) : red(status.sessionStatus)
-      }\n` +
+      `Session status:\t\t${statusMessage(status)}\n` +
         `Tunner Server: \t\t${status.serverUrl}\n` +
         `Forwarding:\t\t\thttp(s)://${status.domain} -> ${status.localhost}:${status.port}\n`,
     );

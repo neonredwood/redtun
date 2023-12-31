@@ -41,7 +41,7 @@ export const onConnection = (clientManager: ClientManager, socket: Socket) => {
     }
   };
   const onDisconnect = (reason: string) => {
-    logger.info("ws-tunnel: Client disconnected: ", reason);
+    logger.info(`ws-tunnel: Client disconnected: ${reason}`);
     clientManager.removeClient(forwardDomain);
     socket.off("message", onMessage);
   };

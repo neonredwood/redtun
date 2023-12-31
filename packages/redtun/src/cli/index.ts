@@ -3,6 +3,7 @@ import fs from "fs";
 import os from "os";
 import path from "path";
 import { initClient } from "../client/tunnel";
+import { getLogger } from ":redtun-common/logging";
 
 export type RedtunConfig = {
   server: string;
@@ -14,6 +15,8 @@ type CliStartOptions = {
   host: string;
   domain: string;
 };
+
+const logger = getLogger("cli");
 
 const program = new Command();
 
@@ -44,11 +47,12 @@ program
     }
 
     if (!config.server) {
-      console.log("Please set remote tunnel server first.");
+      logger.error("Please set remote tunnel server first.");
       return;
     }
+
     if (!config.apiKey) {
-      console.warn(`Please set API key for ${config.server} first.`);
+      logger.warn(`API key has not been set for ${config.server}.`);
     }
 
     initClient({

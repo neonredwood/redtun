@@ -66,8 +66,7 @@ export const initClient = (options: InitOptions) => {
   });
 
   socket.on("connect_error", e => {
-    logger.debug(`Error connecting: ${e.message}`);
-    updateStatusContent({ sessionStatus: "disconnected" });
+    updateStatusContent({ sessionStatus: "disconnected", errorMessage: e.message });
   });
 
   socket.on("disconnect", () => {

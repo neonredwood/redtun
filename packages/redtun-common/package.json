@@ -1,6 +1,6 @@
 {
   "name": "@neonredwood/redtun-common",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Common libraries for redtun",
   "scripts": {
     "build": "tsc -b tsconfig.build.json",
