@@ -8,6 +8,8 @@ It allows you to expose a local webserver behind a NAT or firewall to the public
 
 This is useful in situation where you are developing against an API that requires HTTPS OAuth (or other) API endpoints.
 
+<img width="694" alt="image" src="https://github.com/neonredwood/redtun/assets/382249/ae4584cb-d4b7-4ff8-89b5-8f269955001f">
+
 ## Deployment and Installation
 
 The application consists of two pieces:
