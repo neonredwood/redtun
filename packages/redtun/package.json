@@ -1,6 +1,6 @@
 {
   "name": "@neonredwood/redtun",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Tunnel client for redtun reverse proxy.",
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
