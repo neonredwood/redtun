@@ -21,7 +21,7 @@
     "test": "turbo run --parallel test",
     "typecheck": "turbo run --parallel typecheck",
     "prepare": "husky install",
-    "publish-packages": "turbo build:dist --filter=@neonredwood/redtun && changeset version && changeset publish"
+    "publish-packages": "turbo lint format test build build:dist --filter=@neonredwood/redtun && changeset version && changeset publish"
   },
   "keywords": [],
   "author": "phil@neonredwood.com",

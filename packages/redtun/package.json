@@ -11,9 +11,9 @@
     "lint:fix": "pnpm lint --fix",
     "format": "prettier --check .",
     "format:fix": "prettier --write .",
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "typecheck": "tsc",
-    "publish-packages": "turbo build:dist && changeset version && changeset publish"
+    "publish-packages": "turbo lint format test build build:dist && changeset version && changeset publish"
   },
   "bin": "./dist/client.bundle.js",
   "main": "./dist/index.js",

@@ -15,9 +15,10 @@ export const createDisplay = () => {
     top: "0%",
     left: "0%",
     width: "100%",
-    height: "150",
+    height: "shrink",
     content: "",
-    label: "Status",
+    padding: 1,
+    label: "Redtun (Ctrl+C to quit)",
     border: {
       type: "line",
     },
@@ -39,6 +40,7 @@ export const createDisplay = () => {
     left: "0%",
     width: "100%",
     label: "Requests",
+    padding: 1,
     content: "",
     border: {
       type: "line",
@@ -46,10 +48,14 @@ export const createDisplay = () => {
     style: {
       fg: "white",
       bg: "black",
-      boder: {
+      border: {
         fg: "#f0f0f0",
       },
     },
+  });
+
+  statusBox.on("render", ({ height }: { height: number }) => {
+    requestBox.top = height;
   });
 
   // Append the box to the screen.
