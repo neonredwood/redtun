@@ -15,10 +15,16 @@
     },
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**", "tsconfig.tsbuildinfo"]
+      "outputs": ["dist/**", "tsconfig.build.tsbuildinfo"]
+    },
+    "@neonredwood/redtun#build": {
+      "dependsOn": ["@neonredwood/redtun-common#build"]
+    },
+    "@neonredwood/redtun-server#build": {
+      "dependsOn": ["@neonredwood/redtun-common#build"]
     },
     "build:dist": {
-      "dependsOn": ["^build:dist"],
+      "dependsOn": ["build", "^build:dist"],
       "outputs": ["dist/*.bundle.js"]
     },
     "clean:build": {

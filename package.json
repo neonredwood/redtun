@@ -11,6 +11,7 @@
   "scripts": {
     "build": "turbo run build",
     "build:clean": "turbo run clean:build",
+    "build:dist": "turbo run build:dist",
     "dev": "turbo run dev",
     "lint-format": "turbo run --parallel lint format ",
     "lint-format:fix": "turbo run --parallel lint:fix format:fix",

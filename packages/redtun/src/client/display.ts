@@ -1,13 +1,11 @@
 import * as blessed from "blessed";
 import { green, red, white } from "kolorist";
-// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-var-requires
-const { version } = require("../../package.json");
 
 export const createDisplay = () => {
   // Create a screen object.
   const screen = blessed.screen({
     smartCSR: true,
-    title: `Redtun client v${version}`,
+    title: `Redtun client`,
   });
 
   // Create a box to display the status.

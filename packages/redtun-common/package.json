@@ -1,11 +1,10 @@
 {
   "name": "@neonredwood/redtun-common",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Common libraries for redtun",
   "scripts": {
     "build": "tsc -b tsconfig.build.json",
     "clean:build": "rimraf ./dist",
-    "dev": "nodemon",
     "lint": "eslint . --ext .js,.ts",
     "lint:fix": "pnpm lint --fix",
     "format": "prettier --check .",

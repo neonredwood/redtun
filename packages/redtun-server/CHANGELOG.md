@@ -1,5 +1,11 @@
 # @neonredwood/redtun-server
 
+## 1.0.3
+
+### Patch Changes
+
+- move from webpack to tsup, turbo build reliability changes, dockerignore changes
+
 ## 1.0.2
 
 ### Patch Changes

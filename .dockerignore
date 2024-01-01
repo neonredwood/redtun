@@ -1,10 +1,14 @@
 README.md
+.env
+**/.env
 .env*.local
+**/.env.env*.local
 docker
 *.dockerfile
 k8s/
 .git
 .turbo
+**/.turbo
 node_modules
 **/node_modules
 out/
