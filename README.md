@@ -2,7 +2,7 @@
 
 This project aims to be a self-hostable, deployable alternative to products like
 [Cloudflare Tunnel](https://www.cloudflare.com/products/tunnel/) and [ngrok tunnels](https://ngrok.com/product/secure-tunnels),
-both of which are already great, mature products.
+both of which are already great, mature products. To deploy check out [our guide](https://www.neonredwood.com/blog/how-to-self-hosted-development-proxy-server).
 
 It allows you to expose a local webserver behind a NAT or firewall to the public internet, using a self-hosted public relay.
 
@@ -101,6 +101,10 @@ server {
 **NOTE**: The server can be started without setting `REDTUN_API_KEY` which is _NOT RECOMMENDED_ because this
 leaves the tunnel server open to the internet without authentication. This functionality is for
 testing purposes only and may be removed in future versions.
+
+### Deployment on GKE/Kubernetes
+
+Take a look at the the guide, [how to deploy redtun self-hosted development proxy on GKE](https://www.neonredwood.com/blog/how-to-self-hosted-development-proxy-server).
 
 ### Run the Client
 
