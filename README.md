@@ -1,5 +1,7 @@
 # Redtun
 
+[![https://nodei.co/npm/@neonredwood%2Fredtun.png?downloads=true&downloadRank=true&stars=true&mini=true](https://nodei.co/npm/@neonredwood%2Fredtun.png?downloads=true&downloadRank=true&stars=true&mini=true)](https://www.npmjs.com/package/@neonredwood/redtun)
+
 This project aims to be a self-hostable, deployable alternative to products like
 [Cloudflare Tunnel](https://www.cloudflare.com/products/tunnel/) and [ngrok tunnels](https://ngrok.com/product/secure-tunnels),
 both of which are already great, mature products. To deploy check out [our guide](https://www.neonredwood.com/blog/how-to-self-hosted-development-proxy-server).
