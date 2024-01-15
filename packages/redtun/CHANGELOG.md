@@ -1,5 +1,11 @@
 # @neonredwood/redtun
 
+## 1.0.5
+
+### Patch Changes
+
+- Various dependency updates, documentation updates.
+
 ## 1.0.4
 
 ### Patch Changes
