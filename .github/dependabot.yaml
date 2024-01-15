@@ -9,6 +9,9 @@ updates:
       eslint:
         patterns:
           - "@typescript-eslint/*"
+      socket-io:
+        patterns:
+          - "socket.io*"
 
   - package-ecosystem: "npm"
     directory: "/packages/*"
@@ -19,3 +22,6 @@ updates:
       eslint:
         patterns:
           - "@typescript-eslint/*"
+      socket-io:
+        patterns:
+          - "socket.io*"
