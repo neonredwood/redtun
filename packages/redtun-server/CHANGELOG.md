@@ -1,5 +1,11 @@
 # @neonredwood/redtun-server
 
+## 1.0.5
+
+### Patch Changes
+
+- Dependency updates, security patches and fixes.
+
 ## 1.0.4
 
 ### Patch Changes
