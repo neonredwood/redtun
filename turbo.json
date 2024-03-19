@@ -28,6 +28,8 @@
       "outputs": ["dist/*.bundle.js"]
     },
     "clean": {
+      "dependsOn": ["^clean"],
+      "inputs": ["dist/**", "*tsbuildinfo*"],
       "cache": false
     },
     "dev": {
