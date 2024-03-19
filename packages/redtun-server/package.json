@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc -b tsconfig.build.json",
     "build:dist": "tsup --onSuccess 'tsc --emitDeclarationOnly --declaration'",
-    "clean:build": "rimraf ./dist",
+    "clean": "rimraf ./dist ./tsconfig*tsbuildinfo",
     "dev": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only src/index.ts",
     "lint": "eslint . --ext .js,.ts",
     "lint:fix": "pnpm lint --fix",
