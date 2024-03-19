@@ -4,7 +4,7 @@
   "description": "Common libraries for redtun",
   "scripts": {
     "build": "tsc -b tsconfig.build.json",
-    "clean:build": "rimraf ./dist",
+    "clean": "rimraf ./dist ./tsconfig*tsbuildinfo",
     "lint": "eslint . --ext .js,.ts",
     "lint:fix": "pnpm lint --fix",
     "format": "prettier --check .",

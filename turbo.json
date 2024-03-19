@@ -15,7 +15,7 @@
     },
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**", "tsconfig.build.tsbuildinfo"]
+      "outputs": ["dist/**"]
     },
     "@neonredwood/redtun#build": {
       "dependsOn": ["@neonredwood/redtun-common#build"]
@@ -27,8 +27,8 @@
       "dependsOn": ["build", "^build:dist"],
       "outputs": ["dist/*.bundle.js"]
     },
-    "clean:build": {
-      "dependsOn": ["build"]
+    "clean": {
+      "cache": false
     },
     "dev": {
       "dependsOn": ["build"],
