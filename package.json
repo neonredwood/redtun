@@ -32,7 +32,7 @@
     "@jest/types": "^29.6.3",
     "@swc/core": "^1.4.0",
     "@swc/jest": "^0.2.31",
-    "@types/node": "20.11.0",
+    "@types/node": "20.11.30",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
     "@typescript-eslint/parser": "^7.2.0",
     "eslint": "^8.56.0",
