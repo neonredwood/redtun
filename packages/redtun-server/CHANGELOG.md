@@ -1,5 +1,15 @@
 # @neonredwood/redtun-server
 
+## 1.0.7
+
+### Patch Changes
+
+- Security fixes and updates
+
+## 1.0.6
+
+Version skipped to sync with other project packages.
+
 ## 1.0.5
 
 ### Patch Changes

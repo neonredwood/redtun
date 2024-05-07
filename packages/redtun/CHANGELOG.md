@@ -1,5 +1,11 @@
 # @neonredwood/redtun
 
+## 1.0.7
+
+### Patch Changes
+
+- Security fixes and updates
+
 ## 1.0.6
 
 ### Patch Changes
