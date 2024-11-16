@@ -5,11 +5,7 @@ import { ClientManager } from "./client-manager";
 
 const logger = getLogger("server");
 
-export const tunnelMiddleware = (
-  clientManager: ClientManager,
-  socket: Socket,
-  next: (err?: ExtendedError | undefined) => void,
-) => {
+export const tunnelMiddleware = (clientManager: ClientManager, socket: Socket, next: (err?: ExtendedError) => void) => {
   const clientHost = socket.handshake.headers.host;
   const forwardDomain = socket.handshake.headers["x-forwardme-domain"];
 
@@ -25,7 +21,7 @@ export const tunnelMiddleware = (
 };
 
 export const onConnection = (clientManager: ClientManager, socket: Socket) => {
-  socket.client.conn.remoteAddress;
+  const remoteAddress = socket.client.conn.remoteAddress;
   const connectHost = socket.handshake.headers.host;
   const forwardDomain = socket.handshake.headers["x-forwardme-domain"] as string;
 
@@ -34,7 +30,7 @@ export const onConnection = (clientManager: ClientManager, socket: Socket) => {
     return;
   }
   clientManager.addClient(forwardDomain, socket);
-  logger.info(`Client connected at ${forwardDomain} -> ${socket.client.conn.remoteAddress}`);
+  logger.info(`Client connected at ${forwardDomain} -> ${remoteAddress}`);
   const onMessage = (message: string) => {
     if (message === "ping") {
       socket.send("pong");
