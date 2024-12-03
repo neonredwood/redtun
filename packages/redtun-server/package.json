@@ -27,7 +27,7 @@
   "license": "GPLV3",
   "devDependencies": {
     "@jest/types": "^29.6.3",
-    "@types/express": "^4.17.21",
+    "@types/express": "^5.0.0",
     "@types/jest": "^29.5.14",
     "@types/morgan": "^1.9.9",
     "@types/uuid": "^10.0.0",
